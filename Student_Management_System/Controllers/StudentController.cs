@@ -32,5 +32,18 @@ namespace Student_Management_System.Controllers
             return Ok(response);
         }
 
+        [HttpGet("{studentId:int}")]
+        public IActionResult GetStudentById(int studentId)
+        {
+            var response = _studentService.GetStudentById(studentId);
+
+            if (response == null)
+            {
+                return NotFound("Student not found.");
+            }
+
+            return Ok(response);
+        }
+
     }
 }

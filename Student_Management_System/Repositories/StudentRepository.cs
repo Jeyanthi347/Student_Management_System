@@ -27,5 +27,8 @@ namespace Student_Management_System.Repositories
         {
             return _context.Students.ToList();
         }
+
+        public Student GetStudentById(int studentId) => _context.Students
+                .FirstOrDefault(s => s.StudentId == studentId);
     }
 }

@@ -58,5 +58,25 @@ namespace Student_Management_System.Services
 
             return response;
         }
+
+        public StudentResponseDto GetStudentById(int studentId)
+        {
+            var student = _studentRepository.GetStudentById(studentId);
+
+            if (student == null)
+            {
+                return null;
+            }
+
+            return new StudentResponseDto
+            {
+                StudentId = student.StudentId,
+                StudentName = student.StudentName,
+                Gender = student.Gender,
+                Email = student.Email,
+                PhoneNumber = student.PhoneNumber,
+                DepartmentId = student.DepartmentId
+            };
+        }
     }
 }
