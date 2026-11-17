@@ -10,5 +10,7 @@ namespace Student_Management_System.Repositories.Interfaces
         List<Student> GetAllStudents();
 
         Student GetStudentById(int studentId);
+
+        Student UpdateStudent(Student student);
     }
 }

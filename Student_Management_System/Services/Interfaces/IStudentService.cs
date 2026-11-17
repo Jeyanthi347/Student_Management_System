@@ -10,5 +10,7 @@ namespace Student_Management_System.Services.Interfaces
         List<StudentResponseDto> GetAllStudents();
 
         StudentResponseDto GetStudentById(int studentId);
+
+        StudentResponseDto UpdateStudent(int studentId, StudentUpdateDto student);
     }
 }

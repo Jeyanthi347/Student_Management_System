@@ -45,5 +45,18 @@ namespace Student_Management_System.Controllers
             return Ok(response);
         }
 
+        // PUT: Update Student
+        [HttpPut("{studentId:int}")]
+        public IActionResult UpdateStudent(int studentId, [FromBody] StudentUpdateDto student)
+        {
+            var response = _studentService.UpdateStudent(studentId, student);
+
+            if (response == null)
+            {
+                return NotFound("Student not found.");
+            }
+
+            return Ok(response);
+        }
     }
 }

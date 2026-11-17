@@ -78,5 +78,34 @@ namespace Student_Management_System.Services
                 DepartmentId = student.DepartmentId
             };
         }
+
+        // PUT: Update Student
+        public StudentResponseDto UpdateStudent(int studentId, StudentUpdateDto student)
+        {
+            var existingStudent = _studentRepository.GetStudentById(studentId);
+
+            if (existingStudent == null)
+            {
+                return null;
+            }
+
+            existingStudent.StudentName = student.StudentName;
+            existingStudent.Gender = student.Gender;
+            existingStudent.Email = student.Email;
+            existingStudent.PhoneNumber = student.PhoneNumber;
+            existingStudent.DepartmentId = student.DepartmentId;
+
+            var updatedStudent = _studentRepository.UpdateStudent(existingStudent);
+
+            return new StudentResponseDto
+            {
+                StudentId = updatedStudent.StudentId,
+                StudentName = updatedStudent.StudentName,
+                Gender = updatedStudent.Gender,
+                Email = updatedStudent.Email,
+                PhoneNumber = updatedStudent.PhoneNumber,
+                DepartmentId = updatedStudent.DepartmentId
+            };
+        }
     }
 }
