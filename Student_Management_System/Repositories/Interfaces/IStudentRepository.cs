@@ -12,5 +12,7 @@ namespace Student_Management_System.Repositories.Interfaces
         Student GetStudentById(int studentId);
 
         Student UpdateStudent(Student student);
+
+        bool DeleteStudent(int studentId);
     }
 }

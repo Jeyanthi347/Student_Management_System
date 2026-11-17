@@ -40,5 +40,25 @@ namespace Student_Management_System.Repositories
 
             return student;
         }
+
+
+        // DELETE: Delete Student
+        public bool DeleteStudent(int studentId)
+        {
+            var student = _context.Students
+                .FirstOrDefault(s => s.StudentId == studentId);
+
+            if (student == null)
+            {
+                return false;
+            }
+
+            _context.Students.Remove(student);
+
+            _context.SaveChanges();
+
+            return true;
+        }
+
     }
 }

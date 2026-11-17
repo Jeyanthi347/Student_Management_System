@@ -107,5 +107,20 @@ namespace Student_Management_System.Services
                 DepartmentId = updatedStudent.DepartmentId
             };
         }
+
+
+        // DELETE: Delete Student
+        public bool DeleteStudent(int studentId)
+        {
+            var student = _studentRepository.GetStudentById(studentId);
+
+            if (student == null)
+            {
+                return false;
+            }
+
+            return _studentRepository.DeleteStudent(studentId);
+        }
+
     }
 }

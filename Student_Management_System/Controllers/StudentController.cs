@@ -45,7 +45,6 @@ namespace Student_Management_System.Controllers
             return Ok(response);
         }
 
-        // PUT: Update Student
         [HttpPut("{studentId:int}")]
         public IActionResult UpdateStudent(int studentId, [FromBody] StudentUpdateDto student)
         {
@@ -57,6 +56,20 @@ namespace Student_Management_System.Controllers
             }
 
             return Ok(response);
+        }
+
+        // DELETE: Delete Student
+        [HttpDelete("{studentId:int}")]
+        public IActionResult DeleteStudent(int studentId)
+        {
+            var response = _studentService.DeleteStudent(studentId);
+
+            if (!response)
+            {
+                return NotFound("Student not found.");
+            }
+
+            return Ok("Student deleted successfully.");
         }
     }
 }

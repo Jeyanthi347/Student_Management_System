@@ -12,5 +12,7 @@ namespace Student_Management_System.Services.Interfaces
         StudentResponseDto GetStudentById(int studentId);
 
         StudentResponseDto UpdateStudent(int studentId, StudentUpdateDto student);
+
+        bool DeleteStudent(int studentId);
     }
 }
