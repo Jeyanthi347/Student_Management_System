@@ -381,3 +381,38 @@
     min-width: 850px;
   }
 }
+
+
+
+/* Student Action Buttons */
+.student-list .action-buttons {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  align-items: center;
+  white-space: nowrap;
+}
+
+/* Delete Student Button */
+.student-list .delete-button {
+  padding: 9px 16px;
+  border: none;
+  border-radius: 7px;
+  background: #d9534f;
+  color: #ffffff;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.3s ease;
+}
+
+.student-list .delete-button:hover:not(:disabled) {
+  background: #bd3834;
+  transform: translateY(-2px);
+}
+
+/* Disable Buttons While Deleting */
+.student-list .action-buttons button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}

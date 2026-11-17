@@ -209,13 +209,27 @@
           <td>{{ student.email }}</td>
           <td>{{ student.phoneNumber }}</td>
           <td>{{ student.departmentId }}</td>
-          <td>
+
+          <td class="action-buttons">
+
             <button
               type="button"
               class="edit-button"
-              (click)="editStudent(student)">
+              (click)="editStudent(student)"
+              [disabled]="deletingStudentId === student.studentId">
               Edit
             </button>
+
+            <button
+              type="button"
+              class="delete-button"
+              (click)="deleteStudent(student.studentId)"
+              [disabled]="deletingStudentId === student.studentId">
+              {{ deletingStudentId === student.studentId
+                ? 'Deleting...'
+                : 'Delete' }}
+            </button>
+
           </td>
         </tr>
 

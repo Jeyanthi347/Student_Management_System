@@ -45,6 +45,9 @@ export class Students implements OnInit {
   isEditMode = false;
   editingStudentId: number | null = null;
 
+  // Delete Student properties
+  deletingStudentId: number | null = null;
+
   constructor(
     private studentService: StudentService,
     private cdr: ChangeDetectorRef
@@ -54,7 +57,7 @@ export class Students implements OnInit {
     this.getStudents();
   }
 
-  // POST: Create Student
+  // POST: Create Student / PUT: Update Student
   onSubmit(): void {
 
     if (this.isSubmitting) {
@@ -81,7 +84,6 @@ export class Students implements OnInit {
 
     if (this.isEditMode && this.editingStudentId !== null) {
 
-      // PUT: Update Student
       this.studentService.updateStudent(
         this.editingStudentId,
         studentData
@@ -94,7 +96,6 @@ export class Students implements OnInit {
         )
         .subscribe({
           next: (response) => {
-
             this.message =
               'Student updated successfully! Student ID: ' +
               response.studentId;
@@ -105,7 +106,6 @@ export class Students implements OnInit {
           },
           error: (error) => {
             console.error('Update API Error:', error);
-
             this.message =
               error.error?.title ||
               error.error?.message ||
@@ -117,7 +117,6 @@ export class Students implements OnInit {
 
     } else {
 
-      // POST: Create Student
       this.studentService.createStudent(studentData)
         .pipe(
           finalize(() => {
@@ -127,7 +126,6 @@ export class Students implements OnInit {
         )
         .subscribe({
           next: (response) => {
-
             this.message =
               'Student added successfully! Student ID: ' +
               response.studentId;
@@ -138,7 +136,6 @@ export class Students implements OnInit {
           },
           error: (error) => {
             console.error('API Error:', error);
-
             this.message =
               error.error?.title ||
               error.error?.message ||
@@ -164,7 +161,7 @@ export class Students implements OnInit {
     this.editingStudentId = null;
   }
 
-  // GET: Retrieve all students
+  // GET: Retrieve all Students
   getStudents(): void {
     this.studentService.getAllStudents().subscribe({
       next: (response) => {
@@ -206,7 +203,6 @@ export class Students implements OnInit {
         },
         error: (error) => {
           console.error('Search API Error:', error);
-
           this.searchedStudent = null;
 
           if (error.status === 404) {
@@ -254,5 +250,56 @@ export class Students implements OnInit {
   cancelEdit(): void {
     this.resetForm();
     this.message = 'Update cancelled.';
+  }
+
+  // DELETE: Delete Student
+  deleteStudent(studentId: number): void {
+
+    const confirmDelete = window.confirm(
+      'Are you sure you want to delete Student ID ' + studentId + '?'
+    );
+
+    if (!confirmDelete) {
+      return;
+    }
+
+    this.deletingStudentId = studentId;
+
+    this.studentService.deleteStudent(studentId)
+      .pipe(
+        finalize(() => {
+          this.deletingStudentId = null;
+          this.cdr.detectChanges();
+        })
+      )
+      .subscribe({
+        next: (response) => {
+
+          this.message = response;
+
+          if (this.editingStudentId === studentId) {
+            this.resetForm();
+          }
+
+          if (this.searchedStudent?.studentId === studentId) {
+            this.searchedStudent = null;
+            this.searchMessage = 'Student has been deleted.';
+          }
+
+          this.getStudents();
+          this.cdr.detectChanges();
+        },
+        error: (error) => {
+          console.error('Delete API Error:', error);
+
+          if (error.status === 404) {
+            this.message = 'Student not found!';
+          } else {
+            this.message = 'Unable to delete student. Please try again.';
+          }
+
+          this.cdr.detectChanges();
+        }
+      });
   }
 }

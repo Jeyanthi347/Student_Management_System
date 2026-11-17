@@ -31,24 +31,24 @@ export class StudentService {
 
   constructor(private http: HttpClient) {}
 
-  // POST: Create a new student
+  // POST: Create Student
   createStudent(student: StudentCreateDto): Observable<StudentResponseDto> {
     return this.http.post<StudentResponseDto>(this.apiUrl, student);
   }
 
-  // GET: Retrieve all students
+  // GET: Retrieve all Students
   getAllStudents(): Observable<StudentResponseDto[]> {
     return this.http.get<StudentResponseDto[]>(this.apiUrl);
   }
 
-  // GET: Retrieve a student by ID
+  // GET: Retrieve Student by ID
   getStudentById(studentId: number): Observable<StudentResponseDto> {
     return this.http.get<StudentResponseDto>(
       `${this.apiUrl}/${studentId}`
     );
   }
 
-  // PUT: Update an existing student
+  // PUT: Update Student
   updateStudent(
     studentId: number,
     student: StudentCreateDto
@@ -56,6 +56,14 @@ export class StudentService {
     return this.http.put<StudentResponseDto>(
       `${this.apiUrl}/${studentId}`,
       student
+    );
+  }
+
+  // DELETE: Delete Student
+  deleteStudent(studentId: number): Observable<string> {
+    return this.http.delete(
+      `${this.apiUrl}/${studentId}`,
+      { responseType: 'text' }
     );
   }
 }
