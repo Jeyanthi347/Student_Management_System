@@ -23,7 +23,6 @@ import {
 })
 export class Students implements OnInit {
 
-  // Student registration details
   student = {
     studentName: '',
     gender: '',
@@ -32,92 +31,59 @@ export class Students implements OnInit {
     departmentId: 1
   };
 
-  // Success or error message
   message = '';
-
-  // Store all student records
   students: StudentResponseDto[] = [];
-
-  // Loading status
   isSubmitting = false;
 
-  // Inject StudentService and ChangeDetectorRef
+  // GET Student by ID properties
+  searchStudentId: number | null = null;
+  searchedStudent: StudentResponseDto | null = null;
+  searchMessage = '';
+  isSearching = false;
+
   constructor(
     private studentService: StudentService,
     private cdr: ChangeDetectorRef
   ) {}
 
-  // Execute when component loads
   ngOnInit(): void {
     this.getStudents();
   }
 
-  // Add a new student
+  // POST: Create Student
   onSubmit(): void {
-
-    // Prevent multiple submissions
     if (this.isSubmitting) {
       return;
     }
 
-    // Validate Department ID
     if (Number(this.student.departmentId) <= 0) {
       this.message = 'Please enter a valid Department ID.';
       this.cdr.detectChanges();
       return;
     }
 
-    console.log('Add Student button clicked');
-
-    console.log('Student Data:', this.student);
-
-    // Start loading
     this.isSubmitting = true;
     this.message = 'Adding Student...';
-
     this.cdr.detectChanges();
 
-    // Prepare student data
     const studentData = {
       ...this.student,
       departmentId: Number(this.student.departmentId)
     };
 
-    // Call POST API
     this.studentService.createStudent(studentData)
       .pipe(
-
         finalize(() => {
-
-          // Stop loading
           this.isSubmitting = false;
-
-          console.log(
-            'Finalize executed. isSubmitting:',
-            this.isSubmitting
-          );
-
-          // Refresh screen
           this.cdr.detectChanges();
-
         })
-
       )
       .subscribe({
-
-        // When API request succeeds
         next: (response) => {
-
-          console.log('API Response:', response);
-
-          // Display success message
           this.message =
             'Student added successfully! Student ID: ' +
             response.studentId;
 
-          console.log('Success message:', this.message);
-
-          // Clear registration form
           this.student = {
             studentName: '',
             gender: '',
@@ -126,65 +92,82 @@ export class Students implements OnInit {
             departmentId: 1
           };
 
-          // Update screen
           this.cdr.detectChanges();
-
-          // Refresh student list
           this.getStudents();
-
         },
-
-        // When API request fails
         error: (error) => {
-
           console.error('API Error:', error);
-
           this.message =
             error.error?.title ||
             error.error?.message ||
             'Unable to add student. Please check the entered details.';
 
-          // Update screen
           this.cdr.detectChanges();
-
-        },
-
-        // When request completes
-        complete: () => {
-
-          console.log('POST request completed.');
-
         }
-
       });
   }
 
-  // Get all students
+  // GET: Retrieve all students
   getStudents(): void {
-
-    console.log('Fetching students from database...');
-
     this.studentService.getAllStudents().subscribe({
-
-      // When GET API succeeds
       next: (response) => {
-
-        console.log('Students received:', response);
-
         this.students = response;
-
-        // Update screen
         this.cdr.detectChanges();
-
       },
-
-      // When GET API fails
       error: (error) => {
-
         console.error('Error fetching students:', error);
-
       }
-
     });
+  }
+
+  // GET: Retrieve student by ID
+  searchStudent(): void {
+
+    if (!this.searchStudentId || this.searchStudentId <= 0) {
+      this.searchMessage = 'Please enter a valid Student ID.';
+      this.searchedStudent = null;
+      return;
+    }
+
+    this.isSearching = true;
+    this.searchMessage = 'Searching student...';
+    this.searchedStudent = null;
+    this.cdr.detectChanges();
+
+    this.studentService.getStudentById(this.searchStudentId)
+      .pipe(
+        finalize(() => {
+          this.isSearching = false;
+          this.cdr.detectChanges();
+        })
+      )
+      .subscribe({
+        next: (response) => {
+          this.searchedStudent = response;
+          this.searchMessage = 'Student found successfully!';
+          this.cdr.detectChanges();
+        },
+        error: (error) => {
+          console.error('Search API Error:', error);
+
+          this.searchedStudent = null;
+
+          if (error.status === 404) {
+            this.searchMessage = 'Student not found!';
+          } else {
+            this.searchMessage =
+              'Unable to search student. Please try again.';
+          }
+
+          this.cdr.detectChanges();
+        }
+      });
+  }
+
+  // Clear search results
+  clearSearch(): void {
+    this.searchStudentId = null;
+    this.searchedStudent = null;
+    this.searchMessage = '';
   }
 }
