@@ -3,10 +3,10 @@
 
   <h2>Student Management System</h2>
 
-  <!-- Student Registration -->
+  <!-- Student Registration / Update Form -->
   <div class="student-form">
 
-    <h3>Student Registration</h3>
+    <h3>{{ isEditMode ? 'Update Student' : 'Student Registration' }}</h3>
 
     <form #studentForm="ngForm" (ngSubmit)="onSubmit()">
 
@@ -70,11 +70,21 @@
       <button
         type="submit"
         [disabled]="studentForm.invalid || isSubmitting">
-        Add Student
+        {{ isSubmitting
+          ? (isEditMode ? 'Updating...' : 'Adding...')
+          : (isEditMode ? 'Update Student' : 'Add Student') }}
+      </button>
+
+      <button
+        *ngIf="isEditMode"
+        type="button"
+        class="cancel-edit-button"
+        (click)="cancelEdit()">
+        Cancel
       </button>
 
       <p *ngIf="isSubmitting" class="loading-message">
-        Adding student, please wait...
+        Please wait...
       </p>
 
     </form>
@@ -186,6 +196,7 @@
           <th>Email</th>
           <th>Phone Number</th>
           <th>Department ID</th>
+          <th>Action</th>
         </tr>
       </thead>
 
@@ -198,10 +209,18 @@
           <td>{{ student.email }}</td>
           <td>{{ student.phoneNumber }}</td>
           <td>{{ student.departmentId }}</td>
+          <td>
+            <button
+              type="button"
+              class="edit-button"
+              (click)="editStudent(student)">
+              Edit
+            </button>
+          </td>
         </tr>
 
         <tr *ngIf="students.length === 0">
-          <td colspan="6">No students found.</td>
+          <td colspan="7">No students found.</td>
         </tr>
 
       </tbody>

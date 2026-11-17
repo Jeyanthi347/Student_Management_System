@@ -47,4 +47,15 @@ export class StudentService {
       `${this.apiUrl}/${studentId}`
     );
   }
+
+  // PUT: Update an existing student
+  updateStudent(
+    studentId: number,
+    student: StudentCreateDto
+  ): Observable<StudentResponseDto> {
+    return this.http.put<StudentResponseDto>(
+      `${this.apiUrl}/${studentId}`,
+      student
+    );
+  }
 }

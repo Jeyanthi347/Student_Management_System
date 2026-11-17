@@ -329,3 +329,55 @@
     grid-template-columns: 1fr;
   }
 }
+
+
+/* Edit Student Button */
+.student-list .edit-button {
+  padding: 9px 18px;
+  border: none;
+  border-radius: 7px;
+  background: #2867c7;
+  color: #ffffff;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.3s ease;
+}
+
+.student-list .edit-button:hover {
+  background: #1d4f9e;
+  transform: translateY(-2px);
+}
+
+/* Cancel Edit Button */
+.student-form .cancel-edit-button {
+  width: 100%;
+  padding: 13px;
+  margin-top: 12px;
+  border: 1px solid #d6dfeb;
+  border-radius: 9px;
+  background: #e8edf5;
+  color: #34445c;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.3s ease;
+}
+
+.student-form .cancel-edit-button:hover {
+  background: #d9e2ef;
+  transform: translateY(-2px);
+}
+
+/* Student Table Action Column */
+.student-list th:last-child,
+.student-list td:last-child {
+  text-align: center;
+  white-space: nowrap;
+}
+
+@media (max-width: 768px) {
+  .student-list table {
+    min-width: 850px;
+  }
+}
