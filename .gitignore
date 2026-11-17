@@ -1,0 +1,20 @@
+# Visual Studio
+.vs/
+*.user
+*.suo
+*.cache
+
+# Build folders
+bin/
+obj/
+
+# Visual Studio generated files
+*.pdb
+*.dll
+
+# Logs
+*.log
+
+# Operating system files
+.DS_Store
+Thumbs.db
